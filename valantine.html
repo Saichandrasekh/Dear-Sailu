@@ -1,11 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Our Story ❤️</title>
 
 <style>
+
+.valentine-text {
+  font-family: 'Great Vibes', cursive;
+  font-size: 36px;
+  line-height: 1.4;
+  letter-spacing: 2px;
+  word-spacing: 10px;
+  text-align: center;
+  color: #5a2a83;
+  padding: 0 20px;
+}
+
+/* Mobile fine-tuning */
+@media (max-width: 480px) {
+  .valentine-text {
+    font-size: 30px;
+    word-spacing: 8px;
+  }
+}
+
+
 body {
   margin: 0;
   font-family: Georgia, serif;
@@ -144,7 +167,10 @@ button {
 <body>
 
 <div class="start" id="startScreen">
-  <h1>Something beautiful is waitinggg 💖</h1>
+  <h1 class="valentine-text">
+  Something beautiful is waiting 💖
+</h1>
+
   <button onclick="startStory()">Start</button>
 </div>
 
@@ -171,22 +197,23 @@ button {
 <script>
 const stages = [
   { title:"Our Engagement", images:[
-    {src:"images/E1.jpeg",text:"A promise forever."},
-    {src:"images/E2.jpeg",text:"My happiest yes."}
+    { src:"images/E1.jpeg", text:"A\u00A0\u00A0promise\u00A0\u00A0forever." },
+    { src:"images/E2.jpeg", text:"My\u00A0\u00A0happiest\u00A0\u00A0yes." }
   ]},
   { title:"Our Marriage", images:[
-    {src:"images/m1.jpeg",text:"Two souls, one journey."},
-    {src:"images/m2.jpg",text:"Forever starts here."}
+    { src:"images/m1.jpeg", text:"Two\u00A0\u00A0souls,\u00A0\u00A0one\u00A0\u00A0journey." },
+    { src:"images/m2.jpg", text:"Forever\u00A0\u00A0starts\u00A0\u00A0here." }
   ]},
   { title:"Our Reception", images:[
-    {src:"images/R1.jpeg",text:"Smiles everywhere."},
-    {src:"images/R2.jpeg",text:"Love in every glance."}
+    { src:"images/R1.jpeg", text:"Smiles\u00A0\u00A0everywhere." },
+    { src:"images/R2.jpeg", text:"Love\u00A0\u00A0in\u00A0\u00A0every\u00A0\u00A0glance." }
   ]},
   { title:"Our Honeymoon", images:[
-    {src:"images/H1.jpeg",text:"Everywhere felt like home."},
-    {src:"images/H2.jpeg",text:"With you, life is magic."}
+    { src:"images/H1.jpeg", text:"Everywhere\u00A0\u00A0felt\u00A0\u00A0like\u00A0\u00A0home." },
+    { src:"images/H2.jpeg", text:"With\u00A0\u00A0you,\u00A0\u00A0life\u00A0\u00A0is\u00A0\u00A0magic." }
   ]}
 ];
+
 
 let stageIndex=0;
 let slideIndex=0;
@@ -263,13 +290,18 @@ function showFinal(){
   document.body.innerHTML=`
     <div class="final">
       <div class="pulse-heart">❤️</div>
-      <h1 id="finalText"></h1>
+      <h1 id="finalText" class="valentine-text"></h1>
       <button onclick="location.reload()">Replay Our Story</button>
     </div>`;
-  typeText(document.getElementById("finalText"),
-    "Sailu… you are my forever ❤️ Happy Valentine’s Day");
+  
+  typeText(
+    document.getElementById("finalText"),
+    "Sailu… you are my forever ❤️ Happy Valentine’s Day"
+  );
+
   setInterval(createHeart,500);
 }
+
 
 function startBg(){
   setInterval(createHeart,1200);
@@ -286,5 +318,4 @@ function createHeart(){
 </script>
 
 </body>
-
 </html>
