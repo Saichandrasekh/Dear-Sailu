@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Story ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: linear-gradient(135deg, #fbd3e9, #c3cfe2);
+  overflow-x: hidden;
+}
+
+.hidden { display: none !important; }
+
+.container {
+  padding: 20px;
+  text-align: center;
+}
+
+h1 { color: #5a2a83; }
+
+/* START */
+.start {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* PROGRESS */
+.progress {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+.grid img {
+  width: 100%;
+  border-radius: 22px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  cursor: pointer;
+  animation: slideUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+.grid img:nth-child(1){animation-delay:.2s}
+.grid img:nth-child(2){animation-delay:.4s}
+.grid img:nth-child(3){animation-delay:.6s}
+.grid img:nth-child(4){animation-delay:.8s}
+
+/* DETAIL */
+.detail {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.detail img {
+  max-width: 90%;
+  max-height: 60vh;
+  border-radius: 20px;
+}
+
+.detail p {
+  color: white;
+  margin-top: 15px;
+  min-height: 60px;
+}
+
+/* BUTTON */
+button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg,#7b3fa0,#5a2a83);
+  color: white;
+  font-size: 1rem;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* FLOATING HEARTS */
+.bg-heart {
+  position: fixed;
+  bottom: -30px;
+  font-size: 18px;
+  opacity: 0.15;
+  animation: floatUp 12s linear infinite;
+  pointer-events: none;
+}
+
+/* FINAL */
+.final {
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: glow 2s infinite alternate;
+}
+
+.pulse-heart {
+  font-size: 60px;
+  animation: pulse 1.5s infinite;
+}
+
+/* ANIMATIONS */
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes floatUp {
+  to { transform: translateY(-120vh); opacity: 0; }
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+@keyframes glow {
+  from { background-color: #fbd3e9; }
+  to { background-color: #f7b7d8; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="start" id="startScreen">
+  <h1>Something beautiful is waiting 💖</h1>
+  <button onclick="startStory()">Start</button>
+</div>
+
+<div class="container hidden" id="story">
+  <div class="progress" id="progress"></div>
+  <h1 id="title"></h1>
+
+  <button onclick="playSlideshow()">Play Memories ▶️</button>
+
+  <div class="grid" id="grid"></div>
+
+  <div>
+    <button id="backBtn">⬅ Back</button>
+    <button id="nextBtn">Next ❤️</button>
+  </div>
+</div>
+
+<div class="detail hidden" id="detail">
+  <img id="detailImg">
+  <p id="detailText"></p>
+  <button onclick="closeDetail()">Close</button>
+</div>
+
+<script>
+const stages = [
+  { title:"Our Engagement", images:[
+    {src:"images/E1.jpeg",text:"A promise forever."},
+    {src:"images/E2.jpeg",text:"My happiest yes."}
+  ]},
+  { title:"Our Marriage", images:[
+    {src:"images/m1.jpeg",text:"Two souls, one journey."},
+    {src:"images/m2.jpg",text:"Forever starts here."}
+  ]},
+  { title:"Our Reception", images:[
+    {src:"images/R1.jpeg",text:"Smiles everywhere."},
+    {src:"images/R2.jpeg",text:"Love in every glance."}
+  ]},
+  { title:"Our Honeymoon", images:[
+    {src:"images/H1.jpeg",text:"Everywhere felt like home."},
+    {src:"images/H2.jpeg",text:"With you, life is magic."}
+  ]}
+];
+
+let stageIndex=0;
+let slideIndex=0;
+
+const story=document.getElementById("story");
+const grid=document.getElementById("grid");
+const title=document.getElementById("title");
+const progress=document.getElementById("progress");
+
+function startStory(){
+  startScreen.classList.add("hidden");
+  story.classList.remove("hidden");
+  loadStage();
+  startBg();
+}
+
+function loadStage(){
+  grid.innerHTML="";
+  title.innerText=stages[stageIndex].title;
+  progress.innerHTML=stages.map((_,i)=>i<=stageIndex?"❤️":"🤍").join("");
+  backBtn.style.display=stageIndex===0?"none":"inline-block";
+
+  stages[stageIndex].images.forEach(img=>{
+    const i=document.createElement("img");
+    i.src=img.src;
+    i.onclick=()=>openDetail(img.text,img.src);
+    grid.appendChild(i);
+  });
+}
+
+function typeText(el,text){
+  el.innerText="";
+  let i=0;
+  const t=setInterval(()=>{
+    el.innerText+=text[i++];
+    if(i===text.length) clearInterval(t);
+  },50);
+}
+
+function openDetail(text,src){
+  detailImg.src=src;
+  detail.classList.remove("hidden");
+  typeText(detailText,text);
+}
+
+function closeDetail(){ detail.classList.add("hidden"); }
+
+function playSlideshow(){
+  slideIndex=0;
+  autoSlide();
+}
+
+function autoSlide(){
+  if(slideIndex>=stages[stageIndex].images.length){
+    closeDetail();
+    nextStage();
+    return;
+  }
+  const img=stages[stageIndex].images[slideIndex++];
+  openDetail(img.text,img.src);
+  setTimeout(autoSlide,2500);
+}
+
+function nextStage(){
+  stageIndex++;
+  if(stageIndex<stages.length) loadStage();
+  else showFinal();
+}
+
+nextBtn.onclick=nextStage;
+backBtn.onclick=()=>{stageIndex--;loadStage();};
+
+function showFinal(){
+  document.body.innerHTML=`
+    <div class="final">
+      <div class="pulse-heart">❤️</div>
+      <h1 id="finalText"></h1>
+      <button onclick="location.reload()">Replay Our Story</button>
+    </div>`;
+  typeText(document.getElementById("finalText"),
+    "Sailu… you are my forever ❤️ Happy Valentine’s Day");
+  setInterval(createHeart,500);
+}
+
+function startBg(){
+  setInterval(createHeart,1200);
+}
+
+function createHeart(){
+  const h=document.createElement("div");
+  h.className="bg-heart";
+  h.innerText="❤️";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),12000);
+}
+</script>
+
+</body>
+</html>
